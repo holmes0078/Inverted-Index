@@ -1,6 +1,7 @@
 //
 //  make_index.cpp
 //  
+//  builts an binary index from sorted postings
 //
 //  Created by Tushar Ahuja on 10/19/17.
 //
@@ -37,23 +38,17 @@ int main()
         iss >> freq;
         
         if (word == prev_word){
-//            std::cout << " " << doc_id;
             index_file.write ((char*)&doc_id, sizeof(doc_id));
             index_file.write ((char*)&freq, sizeof(freq));
             prev_word = word;
             num_docs += 1;
         }
         else{
-            //can write num_docs for word
-            //can write end position for prev_word
-            //can write start position for word
             end_pos = index_file.tellg();
             if (!prev_word.empty()){
                 lex_file << " " << end_pos << " " << num_docs <<std::endl;
             }
-//            std::cout << " " << num_docs << std::endl;
             num_docs = 1;
-//            std::cout << word << " " << doc_id;
             start_pos = index_file.tellg();
             lex_file << word << " " << start_pos;
             index_file.write ((char*)&doc_id, sizeof(doc_id));
