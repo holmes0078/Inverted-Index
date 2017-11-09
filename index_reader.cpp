@@ -1,6 +1,7 @@
 //
 //  index_reader.cpp
 //  
+//  queries the index for word and returns top 10 url's according to BM25 ranking
 //
 //  Created by Tushar Ahuja on 10/19/17.
 //
@@ -167,7 +168,6 @@ class reader{
             if (d > did){
                 did = d;
                 /* not in intersection or disjunctive*/
-//                disjunctive = 1;
                 break;
             }
             else
@@ -232,7 +232,6 @@ class reader{
             index_file.close();
         }
         else{
-//            cout << "Conjuctive Query" << endl;
             sort(results.begin(), results.end(), [ ]( const std::pair<unsigned long int, double> &lhs, const std::pair<unsigned long int, double> &rhs){
                              return (lhs.second < rhs.second);
             });
