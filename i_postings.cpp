@@ -1,6 +1,6 @@
 //
 //  ipostings.cpp
-//
+//  Generates intermediate postings which are sorted using GNU sort command
 //
 //  Created by Tushar Ahuja on 10/10/17.
 //
@@ -62,7 +62,6 @@ int main() {
     std::map<int, std::pair<std::string, int>> url_table;
     std::set<std::pair<std::string, int>> postings;
     std::map<std::string, int> freq;
-//    std::vector<std::pair<std::string, int>> postings;
     std::string posting_name;
     int posting_num = 1;
     
@@ -75,7 +74,6 @@ int main() {
     url_file.open("url_table.txt", std::ios_base::app | std::ios_base::out);
     
     int temp = 1;
-//    int line_num;
     
     for (auto i: file_names){
         if (i.find(".gz") != std::string::npos){
@@ -84,9 +82,7 @@ int main() {
             posting_name = "posting" + std::to_string(posting_num) + ".txt";
             std::ofstream myfile;
             myfile.open(posting_name, std::ios_base::app | std::ios_base::out);
-            
-//            line_num = 0;
-            
+        
             std::ifstream file(file_name, std::ios_base::in | std::ios_base::binary);
             boost::iostreams::filtering_streambuf<boost::iostreams::input> inbuf;
             inbuf.push(boost::iostreams::gzip_decompressor());
@@ -96,18 +92,10 @@ int main() {
             //Iterate lines
             std::string str;
             
-//            temp += 1;
-//
-//            if (temp == 6)
-//                break;
-            
             int d_size = 0;
             while(std::getline(instream, str)) {
                 
-//                line_num += 1;
-                
                 if ( (check_url) && (str.find("WARC-Target-URI") != std::string::npos) ) {
-                    //            std::cout << str << '\n';
                     if (!prev_url.empty()){
                         url_table[doc_id-1] = std::make_pair(prev_url, d_size);
                     }
@@ -144,7 +132,6 @@ int main() {
                                     freq[x] += 1;
                                 }
                                 postings.insert(std::make_pair(x,doc_id));
-//                                postings.push_back(std::make_pair(x,doc_id));
                                 d_size += 1;
                             }
                         }
@@ -154,18 +141,15 @@ int main() {
                     check_url = true;
                 }
                 
-//                if (line_num > 1000)
-//                    break;
-                
-//                If posting size greater than one million dump to file
-//                if (postings.size() >= 1000000){
-//                for (auto& i: postings){
-//                    myfile<< i.first << " " << i.second << "\n";
-//                }
-//                postings.clear();
-//                freq.clear();
+               If posting size greater than one million dump to file
+               if (postings.size() >= 1000000){
+               for (auto& i: postings){
+                   myfile<< i.first << " " << i.second << "\n";
+               }
+               postings.clear();
+               freq.clear();
 
-//                }
+               }
                 
 //                If url size greater than one million dump to file
                 if(url_table.size() >= 1000000){
